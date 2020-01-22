@@ -57,8 +57,11 @@ Point Line::intersection(const Line &line, bool *bOnEdge) const
         // Normal cases.
         Point a12 = p2 - p1;
         Point b12 = line.p2 - line.p1;
-        double ang = angle(a12, b12);
-        if (ang < EPS || abs(3.141592653 - ang) < EPS)
+        double abx = p1.x - line.p1.x;
+        double aby = p1.y - line.p1.y;
+        double ab = a12.x*b12.y - b12.x*a12.y;
+        
+        if (ab <= EPS)
             bOn = false; // Collinear!!
         else {
             // a1_x + m*a12_x = b1_x + n*b12_x
@@ -67,9 +70,6 @@ Point Line::intersection(const Line &line, bool *bOnEdge) const
             // m = ( (a1_y-b1_y)*b12_x - (a1_x-b1_x)*b12_y ) / (a12_x*b12_y - b12_x*a12_y)
             // 0 < m < 1
             // 0 < n < 1
-            double abx = p1.x - line.p1.x;
-            double aby = p1.y - line.p1.y;
-            double ab = a12.x*b12.y - b12.x*a12.y;
             assert(abs(ab)>EPS);
             double n = (aby*a12.x - abx*a12.y) / ab;
             double m = (aby*b12.x - abx*b12.y) / ab;
